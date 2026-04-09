@@ -24,9 +24,9 @@ The first Agama vault. Built on our relationship with Nimofast, it validates the
 
 3. NAV accrues linearly from $97,000 to $100,000 over 30 days
 
-4. The Oracle Sidecar reads invoice balances via view key and publishes a signed NAV attestation on-chain. Debtor identities and amounts remain concealed by Enygma
+4. The Oracle Sidecar reads invoice balances via view key, computes the NAV, and generates a ZK proof using gnark. The proof is verified on-chain by anyone. Debtor identities and amounts remain concealed by Enygma
 
-5. The signed NAV attestation is published on the public chain. agaINV price rises.
+5. The ZK proof is verified on-chain. on the public chain. agaINV price rises.
 
 6. At maturity, Nimofast repays $100,000. The vault captures the spread.
 

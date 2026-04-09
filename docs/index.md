@@ -13,10 +13,10 @@ We do not tokenize assets. We curate and structure the financing layer.
 ```
 RAYLS PRIVATE NODE                    RAYLS PUBLIC CHAIN
 
-  Nimofast tokenizes               Agama NAV Oracle         Lagoon Vault
-  invoices via Parfin               reads signed NAV          (ERC-7540)
+  Nimofast tokenizes               Agama NAV Oracle          Lagoon Vault
+  invoices via Parfin               reads ZK-verified NAV          (ERC-7540)
 
-  ┌──────────────┐     signed NAV     ┌──────────┐           ┌──────────────┐
+  ┌──────────────┐     ZK-verified NAV     ┌──────────┐           ┌──────────────┐
   │  Tokenized   │────────────────▶│   NAV    │──────────▶│   agaINV     │
   │  invoices    │  (aggregated NAV only,     │  Oracle  │  push NAV │   vault      │
   │  (private)   │   no data)      └──────────┘           │              │

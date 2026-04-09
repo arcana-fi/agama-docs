@@ -1,168 +1,311 @@
 # NAV Oracle
 
-The NAV oracle is the core proprietary technology Agama builds. Everything else — vault shell, fees, KYC, reporting — is provided by Lagoon. The oracle is what makes Agama structurally non-replaceable.
+The NAV Oracle is the core proprietary technology Agama builds. Everything else — vault shell, fees, KYC, reporting — is provided by Lagoon. The oracle is what makes Agama structurally non-replaceable, and what makes it one of the first verifiable bridges between a private institutional chain and public DeFi.
 
 ## The problem: bridging private to public
 
-For an invoice sitting on Nimofast's Privacy Node to generate yield in a public Lagoon vault, something has to bridge the gap between the two layers. Rayls calls this a relayer. Without it, the invoices stay locked in the Privacy Node — invisible, non-valorizable, non-existent for the public vault.
-
-## The Agama Oracle Sidecar
-
-Agama builds and maintains a software process — the Oracle Sidecar — that runs alongside the institution's Privacy Node. The institution (Nimofast) installs and runs it. Agama owns and maintains the code.
+For an invoice sitting on Nimofast's Privacy Node to generate yield in a public Lagoon vault, something has to bridge the gap between the two layers. Without this bridge, the invoices stay locked — invisible, non-valorizable, non-existent for the public vault.
 
 ```
-PRIVACY NODE NIMOFAST
-┌─────────────────────────────────────────────────────┐
-│                                                     │
-│  Invoices tokenized (Enygma encrypted)              │
-│                                                     │
-│  + AGAMA ORACLE SIDECAR                             │
-│    (process running alongside the node)             │
-│                                                     │
-│    1. Reads invoice balances via view key            │
-│    2. Computes NAV (linear accrual per invoice)      │
-│    3. Signs the attestation                          │
-│                                                     │
-└───────────────────────┬─────────────────────────────┘
-                        │
-                        │  signed NAV attestation
-                        │  (only the total NAV crosses,
-                        │   no invoice data)
-                        │
-                        ▼
-RAYLS PUBLIC CHAIN
-┌─────────────────────────────────────────────────────┐
-│                                                     │
-│  IAgamaOracle smart contract                        │
-│    receives the signed NAV                          │
-│    updates the share price                          │
-│    triggers Lagoon vault settlement                 │
-│                                                     │
-└─────────────────────────────────────────────────────┘
+PRIVACY NODE (Nimofast)
+┌─────────────────────────────────────┐
+│  Invoice #1: [ENCRYPTED]           │
+│  Invoice #2: [ENCRYPTED]           │
+│  Invoice #3: [ENCRYPTED]           │
+│  Total NAV:  ???                   │
+└──────────────────┬──────────────────┘
+                   │
+                   │  Public chain cannot read this.
+                   │  A DeFi vault cannot price
+                   │  what it cannot see.
+                   │
+                   ▼
+PUBLIC CHAIN
+┌─────────────────────────────────────┐
+│  agaINV vault                       │
+│  Share price: ???                   │
+│  Cannot update without NAV          │
+└─────────────────────────────────────┘
 ```
 
-Nimofast runs the sidecar. Agama owns, maintains, and updates it.
+This is not a Nimofast problem. It is a structural problem for every institution on Rayls. Agama solves it.
 
-## What the sidecar software looks like
+## Why a real ZK proof, not a signed attestation
 
-```
-agama-oracle-node/
-  ├── connector/
-  │   └── privacy_node_client.ts
-  │       Connects to the Privacy Node via Rayls API
-  │       Authenticates with view key
-  │       Reads invoice balances (decrypted locally)
-  │
-  ├── calculator/
-  │   └── nav_engine.ts
-  │       Receives decrypted amounts
-  │       Computes total NAV (linear accrual)
-  │       Applies risk parameters
-  │
-  ├── publisher/
-  │   └── onchain_relay.ts
-  │       Signs the NAV attestation
-  │       Sends the transaction to Public Chain
-  │       Calls IAgamaOracle.updateNAV()
-  │
-  └── config/
-      └── nimofast.config.json
-          Client-specific parameters
-          (Privacy Node address, view key,
-           update frequency, risk thresholds)
-```
+Most oracle designs in DeFi rely on a multisig attestation: a trusted party signs a value and publishes it on-chain. If the signer lies, it is only detectable after the fact.
 
-Each institutional client gets the same sidecar configured for their asset type. Nimofast for invoices. Santander for trade finance. Nuclea for receivables. The software is the same. The configuration changes.
+Agama does not use attestations. The NAV Oracle generates a real ZK proof using gnark — the same library used by Enygma internally. The proof is verified on-chain by anyone, instantly. If the NAV is wrong, the proof is invalid and the smart contract rejects it. Agama cannot lie.
 
-## Why this is strategically critical
+This is possible because Enygma uses Pedersen commitments to store balances. A Pedersen commitment is `C = v*G + r*H` where `v` is the value and `r` is a blinding factor. The critical property: Pedersen commitments are homomorphic. You can add commitments without knowing the individual values. `C1 + C2` is itself a valid commitment for `(v1 + v2)` without revealing `v1` or `v2` separately. This means the circuit can verify portfolio-level properties without exposing individual invoice data.
 
-This is the Chainlink model. Chainlink owns the oracle node software. Institutions run the nodes. Chainlink is not easily replaceable because the software belongs to Chainlink.
+## The Oracle Sidecar
 
-For Agama:
+Agama builds and maintains a software process — the Oracle Sidecar — that runs alongside each institution's Privacy Node. The institution runs it. Agama owns the code.
 
 ```
-Without the Agama Oracle Sidecar:
-  Nimofast's invoices stay invisible on the Public Chain
-  Zero yield for investors
-  The vault is dead
-
-With the sidecar:
-  Nimofast is technically dependent on Agama
-  for its invoices to generate liquidity
-  Switching cost is enormous
-  Nimofast cannot just "change curator"
-  without replacing the entire bridge infrastructure
+PRIVACY NODE (Nimofast)
+┌──────────────────────────────────────────────────────┐
+│                                                      │
+│   Invoice tokens (Enygma encrypted, Pedersen         │
+│   commitments on balances)                           │
+│                                                      │
+│   ┌──────────────────────────────────────────────┐   │
+│   │  AGAMA ORACLE SIDECAR              (Go)      │   │
+│   │                                              │   │
+│   │  1. connector/enygma_client.go               │   │
+│   │     Reads invoice tokens via view key        │   │
+│   │     Obtains: face values, blinding factors,  │   │
+│   │     purchase dates, maturity dates           │   │
+│   │                                              │   │
+│   │  2. circuit/nav_circuit.go                   │   │
+│   │     gnark ZK circuit that proves:            │   │
+│   │     - each face value is positive            │   │
+│   │     - accrual is computed correctly           │   │
+│   │     - NAV = sum of all accrued values        │   │
+│   │     - tranching is computed correctly         │   │
+│   │     Generates proof π                        │   │
+│   │                                              │   │
+│   │  3. publisher/onchain_relay.go               │   │
+│   │     Submits (NAV, tranching, π) on-chain     │   │
+│   │     Pays gas in USDr                         │   │
+│   └──────────────────────────────────────────────┘   │
+│                                                      │
+└────────────────────────┬─────────────────────────────┘
+                         │
+                         │  ZK proof π + NAV + tranching
+                         │  (no invoice data crosses)
+                         │
+                         ▼
+PUBLIC CHAIN
+┌──────────────────────────────────────────────────────┐
+│                                                      │
+│   AgamaOracle.sol                                    │
+│     AgamaVerifier.sol (auto-generated by gnark)      │
+│     Verifies π on-chain using BN254 precompiles      │
+│     If valid: updates NAV + share price              │
+│     If invalid: transaction reverts                  │
+│                                                      │
+│   Anyone can call verifyProof() and check            │
+│   that the published NAV is correct                  │
+│                                                      │
+└──────────────────────────────────────────────────────┘
 ```
 
-This is the real moat. Not the vault curator fees. The oracle infrastructure.
+What crosses the bridge: the aggregated NAV, the tranche breakdown, and the ZK proof. No invoice details, no debtor names, no individual amounts.
 
-## The endgame: oracle network
+What stays private: everything. The sidecar reads data locally using the view key, computes the proof locally, and only publishes the verified result.
 
-```
-V1    Deploy sidecar at Nimofast
-      1 node, 1 client, prove the concept
+## NAV computation with tranching
 
-V2    Deploy at Santander, Nuclea, AmFi
-      Multiple nodes, multiple asset types
-      Agama becomes the reference infrastructure
-      for bridging private assets to public DeFi on Rayls
-
-V3    Any new curator wanting to launch a vault
-      on a Rayls private asset MUST use the Agama
-      oracle network to read the NAV
-      Agama takes fees on every third-party vault
-      using its nodes
-
-V4    agaUSD backed by the entire oracle network
-      Every private asset on Rayls that passes
-      through an Agama Node feeds the synthetic dollar
-```
-
-```
-Chainlink  =  oracle for public price data
-              everywhere, on every chain
-
-Agama      =  oracle for private asset NAV
-              everywhere, on every Rayls Privacy Node
-              (and potentially other privacy chains)
-```
-
-The difference with Chainlink: the data Agama bridges is confidential by design. Only the sidecar with the view key can read it. Agama is structurally non-replaceable.
-
-## NAV computation
+The oracle does not publish a single NAV number. It publishes the NAV broken down into three risk tranches, computed from the invoice portfolio.
 
 ```
 NAV(t) = Σ (face_value_i × accrual_factor_i)
 
 accrual_factor_i = (t - t_purchase_i) / (t_maturity_i - t_purchase_i)
+
+Tranche assignment by invoice duration:
+
+  SENIOR      duration ≤ 30 days     debtors: Petrobras, Shell
+  MEZZANINE   duration 30-60 days    debtors: regulated distributors
+  JUNIOR      duration > 60 days     longer duration positions
 ```
 
-V1: daily update, linear accrual. V2: real-time feed from the sidecar.
+What the investor sees on-chain:
 
-## On-chain interface
+```
+agaINV Portfolio
+
+NAV Total        :  1,240,000 USDXP
+ZK Proof         :  Verified on-chain
+
+Breakdown :
+  Senior         :    744,000 USDXP  (60%)
+  Mezzanine      :    372,000 USDXP  (30%)
+  Junior         :    124,000 USDXP  (10%)
+
+Last update      :  2026-04-30 14:23 UTC
+```
+
+Why tranching from day one: it is the foundation for agaUSD at V4 (the capital stack already exists on-chain with historical data), and it prepares Cork integration (the lender can look at the senior ratio to decide the acceptable LTV on agaINV).
+
+## The ZK circuit
+
+The circuit is written in Go using gnark (ConsenSys ZK library, production-ready, used by Enygma). It compiles once, generates a Solidity verifier contract, and then produces proofs for each NAV update.
+
+```
+gnark workflow:
+
+  STEP 1 — Write the circuit (nav_circuit.go)
+           Defines mathematical constraints
+
+  STEP 2 — Compile the circuit (one-time)
+           gnark.Compile() → generates AgamaVerifier.sol
+           + proving key (sidecar keeps this)
+           + verifying key (deployed on-chain)
+
+  STEP 3 — Deploy the verifier
+           AgamaVerifier.sol deployed on Rayls Public Chain
+           One-time deployment
+
+  STEP 4 — Generate proofs (every NAV update)
+           Sidecar reads invoices via view key
+           Computes NAV + tranching
+           gnark.Prove() → proof π
+           Submits (NAV, tranching, π) to AgamaOracle
+           Verifier checks π on-chain
+           If valid → NAV updated
+           If invalid → transaction reverts
+```
+
+What the circuit proves without revealing private inputs:
+
+```
+PRIVATE INPUTS (never published)
+  vi           face value of each invoice
+  ri           Enygma blinding factor
+
+CIRCUIT CONSTRAINTS
+  1. Each face value is positive (range proof: vi > 0)
+  2. Each accrual factor is computed correctly
+     from the public timestamps
+  3. No invoice has accrued beyond its face value
+     (accrual_factor ≤ 1)
+  4. The sum of all accrued values = the claimed NAV
+  5. The tranche breakdown sums to the total NAV
+  6. Each invoice is assigned to the correct tranche
+     based on its duration
+
+PUBLIC OUTPUTS (published on-chain)
+  NAV total                  verified
+  Senior / Mezzanine / Junior breakdown  verified
+  Timestamps per invoice     verified
+  ZK proof π                 verifiable by anyone
+```
+
+## Sidecar repository structure
+
+```
+agama-oracle-node/                         (Go)
+  │
+  ├── circuit/
+  │   └── nav_circuit.go                   THE CORE
+  │       gnark circuit encoding:
+  │       range proofs, accrual computation,
+  │       NAV summation, tranche classification
+  │
+  ├── setup/
+  │   └── compile.go                       RUN ONCE
+  │       gnark.Compile(circuit)
+  │       → AgamaVerifier.sol
+  │       → proving key
+  │       → verifying key
+  │
+  ├── connector/
+  │   └── enygma_client.go                 RAYLS API
+  │       Connects to Privacy Node
+  │       Reads invoice tokens via view key
+  │       Returns: []Invoice{FaceValue, PurchaseTime, MaturityTime}
+  │
+  ├── prover/
+  │   └── nav_prover.go                    PROOF GENERATION
+  │       Receives decrypted invoices
+  │       Builds the witness (private + public inputs)
+  │       gnark.Prove(circuit, witness) → π
+  │
+  ├── publisher/
+  │   └── onchain_relay.go                 ON-CHAIN SUBMISSION
+  │       Calls AgamaOracle.updateNAV(NAV, tranching, π)
+  │       Pays gas in USDr
+  │
+  └── config/
+      └── nimofast.config.json
+          privacy_node_rpc : "https://..."
+          view_key          : "0x..."
+          oracle_contract   : "0x..."
+          update_interval   : "24h"
+```
+
+Each institutional client gets the same sidecar configured for their asset type. Nimofast for invoices. Santander for trade finance. Nuclea for receivables. The software is the same. The configuration changes.
+
+## On-chain contracts
+
+gnark auto-generates `AgamaVerifier.sol` at compile time. The oracle contract wraps it:
 
 ```solidity
-interface IAgamaOracle {
+contract AgamaOracle {
+
+    struct TrancheNAV {
+        uint256 total;
+        uint256 senior;
+        uint256 mezzanine;
+        uint256 junior;
+        uint256 timestamp;
+    }
+
+    IVerifier public immutable verifier;  // gnark auto-generated
+    TrancheNAV public latestNAV;
+
     function updateNAV(
-        bytes32 proofHash,
-        uint256 newNAV,
-        uint256 timestamp,
-        bytes calldata zkProof
-    ) external;
+        TrancheNAV calldata nav,
+        uint256[2] calldata a,       // gnark proof components
+        uint256[2][2] calldata b,
+        uint256[2] calldata c
+    ) external {
+        uint256[] memory pub = new uint256[](5);
+        pub[0] = block.timestamp;
+        pub[1] = nav.total;
+        pub[2] = nav.senior;
+        pub[3] = nav.mezzanine;
+        pub[4] = nav.junior;
+
+        // On-chain ZK verification
+        // Invalid proof → automatic revert
+        require(
+            verifier.verifyProof(a, b, c, pub),
+            "Invalid ZK proof"
+        );
+
+        latestNAV = nav;
+    }
 
     function getLatestNAV() external view returns (
-        uint256 nav,
-        uint256 timestamp,
+        TrancheNAV memory nav,
         bool isValid
-    );
+    ) {
+        nav = latestNAV;
+        isValid = (block.timestamp - nav.timestamp) < 48 hours;
+    }
 }
 ```
 
+Anyone can call `verifyProof()` and cryptographically confirm that the published NAV is correct — without seeing any private data. This is the real oracle.
+
+## What makes this a first
+
+Agama is one of the first verifiable oracle bridges between a private institutional chain and public DeFi. Existing private-to-public bridges rely on trusted attestations (multisig signers, trusted committees). Agama replaces trust with math: if the NAV is wrong, the ZK proof is invalid and the smart contract rejects it automatically.
+
+No other vault curator in the RWA space offers on-chain verifiable proofs of NAV. This is the technical moat that scales from one client (Nimofast) to an oracle network (V3).
+
+## Questions to confirm with Rayls before build
+
+Everything depends on the Privacy Node API. These must be answered before coding `enygma_client.go`:
+
+1. When using the view key, does the API return decrypted face values directly, or the raw Pedersen commitments with blinding factors? Both work for gnark, but the circuit complexity differs.
+
+2. Do invoice tokens on the Privacy Node have structured metadata accessible via API (purchase_date, maturity_date, face_value)? Or is this data stored off-chain at Nimofast?
+
+3. Does the Rayls Public Chain support Groth16 proof verification (gnark default)? If BN254 precompiles are available, verification is cheap. Otherwise gnark can target Plonk.
+
+4. Is there a testnet Privacy Node accessible to Agama before April 30 for end-to-end testing?
+
 ## Security parameters
 
-| Parameter | V1 | V2 |
-|-----------|----|----|
-| Update frequency | Daily | Real-time |
-| Access control | Multisig relayer | Multisig + automated |
-| Circuit breaker | NAV deviation > 5% in 24h | NAV deviation > 3% in 6h |
-| Staleness threshold | 48 hours | 6 hours |
+| Parameter | Value |
+|-----------|-------|
+| Update frequency | Daily (V1), real-time (V2) |
+| Proof system | Groth16 via gnark (or Plonk if no BN254 precompile) |
+| Circuit size | Fixed at 100 invoices max (V1) |
+| Staleness threshold | 48 hours |
+| Circuit breaker | NAV deviation > 5% in 24h → update blocked |
+| Verifier | Auto-generated by gnark, deployed once on Public Chain |

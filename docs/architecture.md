@@ -16,8 +16,8 @@ Agama is built on top of the Rayls architecture, which separates private institu
 │                                                                     │
 └──────────────────────────┬──────────────────────────────────────────┘
                            │
-                     Signed NAV attestation
-                     (only the aggregated NAV crosses)
+                     ZK-verified NAV (gnark proof)
+                     (proof verified on-chain, no data crosses)
                            │
 ┌──────────────────────────┼──────────────────────────────────────────┐
 │                          │                                          │
@@ -63,7 +63,7 @@ For Agama: the assets live on Privacy Nodes (layer 1). The vaults and LP tokens 
 | Layer | Data | Visibility |
 |-------|------|------------|
 | Privacy Node | Invoice metadata, debtor identity, amounts, payment history, credit scores | Only the originator (Nimofast) |
-| Bridge | Signed NAV attestation, aggregated risk score | The proof is public, the inputs are not |
+| Bridge | ZK-verified NAV (gnark proof), aggregated risk score | The proof is public, the inputs are not |
 | Public Chain | Vault token (agaINV), share price, NAV, deposit/withdrawal history | Everyone |
 
 ## Gas management
