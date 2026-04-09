@@ -49,7 +49,7 @@ Agama is built on top of the Rayls architecture, which separates private institu
 │                          ┌───────────────┐                         │
 │                          │  Investors    │                          │
 │                          │              │                           │
-│                          │  agama.financial│                          │
+│                          │  agama.finance│                          │
 │                          │  Lagoon app  │                           │
 │                          └───────────────┘                         │
 │                                                                     │

@@ -11,7 +11,7 @@ Deploy agaINV on Rayls mainnet day one. Prove the concept with Nimofast. Build t
 | USDXP deposit flow | Integrate |
 | USDr gas management | Integrate |
 | Daily settlement cycle trigger | Build |
-| agama.financial frontend | Build |
+| agama.finance frontend | Build |
 | KYC whitelist via Lagoon | Manual V1 |
 | Nimofast onboarding (first invoice batch) | In progress |
 

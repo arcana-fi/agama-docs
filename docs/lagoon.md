@@ -14,7 +14,7 @@ Agama deploys as a curator on Lagoon. We do not write, audit, or maintain any va
 | On-chain reporting | Full NAV history, transaction log, share price evolution — all on-chain | We provide the NAV. Lagoon records and exposes it |
 | NAV oracle | Lagoon accepts any valuation provider. The NAV feed is the curator's responsibility | We build this. It reads Enygma ZK proofs and pushes the verified NAV on-chain |
 | Asset strategy | Infrastructure-agnostic. Does not decide what goes in the vault | We decide. Which invoices to buy, at what discount, with what risk parameters |
-| Investor interface | app.lagoon.finance lists all vaults automatically | agama.financial is our branded frontend for institutional clients. Both channels coexist |
+| Investor interface | app.lagoon.finance lists all vaults automatically | agama.finance is our branded frontend for institutional clients. Both channels coexist |
 
 ## Why this matters
 
