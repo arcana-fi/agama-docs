@@ -8,8 +8,8 @@ The first Agama vault. Built on our relationship with Nimofast, it validates the
 |-----------|-------|
 | Underlying | Nimofast LNG and energy invoices tokenized on Rayls via Parfin |
 | Debtors | Petrobras, Shell, regulated Brazilian energy distributors |
-| Target yield | 8 to 12% APY ** |
-| Duration | 30 to 90 days, continuously renewed ** |
+| Target yield | 8 to 16% APY (subject to final terms with Nimofast) ** |
+| Duration | 30 to 90 days, continuously renewed (subject to final terms with Nimofast) ** |
 | Privacy | Debtor identities and amounts concealed via Enygma privacy layer |
 | Deposit currency | USDXP (primary), USDr, USDT |
 | Minimum ticket | 50,000 USDXP |
@@ -38,7 +38,10 @@ The first Agama vault. Built on our relationship with Nimofast, it validates the
    │   purchase                    30 days              face     │
    │   price          NAV accrues linearly             value    │
    │                                                             │
-   │   Spread = $3,000 = 3% over 30 days ≈ 36% annualized       │
+   │   Spread = $3,000 = 3% over 30 days
+   Gross annualized: ~36%
+   Net to investors after utilization rate,
+   cash buffer, and fees: 8-16% APY       │
    │                                                             │
    └─────────────────────────────────────────────────────────────┘
 ```

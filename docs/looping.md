@@ -8,7 +8,7 @@ agaINV has a 30-90 day redemption window. A lending market will not accept it as
 
 Agama awaits the deployment of a native lending market on the Rayls Public Chain. Once available, three looping scenarios become possible.
 
-## Scenario A — agaINV loop on Rayls
+## Scenario A — agaINV loop on Rayls [V2 — requires Rayls lending market]
 
 Target: 20-25% net APY.
 
@@ -40,13 +40,13 @@ Target: 20-25% net APY.
 | Borrow cost | 130,000 × 5.5% = 7,150/yr |
 | Net yield | ~20,450/yr on 100,000 = **~20% APY** |
 
-## Scenario B — agaYLD loop via Arbitrum
+## Scenario B — agaYLD loop via Arbitrum [V2]
 
 Target: 12-15% net APY. Available earlier than Scenario A because it does not require a Rayls-native lending market.
 
 agaYLD contains public assets (BUIDL, USDY, TBILL, USDXP) — no privacy required. Bridge natively from Rayls to Arbitrum (Orbit). Supply agaYLD as collateral on Morpho Arbitrum (already deployed). Borrow USDC. Bridge back to Rayls. Re-deposit into agaYLD. Arbitrum development grants available to bootstrap liquidity.
 
-## Scenario C — USDXP basis trade
+## Scenario C — USDXP basis trade [V2 — requires Rayls lending market]
 
 Target: 15-18% net APY.
 

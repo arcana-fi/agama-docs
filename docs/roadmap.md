@@ -6,12 +6,12 @@ Deploy agaINV on Rayls mainnet day one. Prove the concept with Nimofast. Build t
 
 | Component | Status |
 |-----------|--------|
-| NAV oracle (linear accrual + ZK proof validation) | Build |
+| NAV oracle — gnark ZK proof with TrancheNAV (Go): enygma_client.go, nav_circuit.go, AgamaVerifier.sol, onchain_relay.go | Build |
 | Lagoon curator setup (agaINV on Rayls Public Chain) | Configure |
 | USDXP deposit flow | Integrate |
 | USDr gas management | Integrate |
 | Daily settlement cycle trigger | Build |
-| agama.finance frontend | Build |
+| agama.financial frontend | Build |
 | KYC whitelist via Lagoon | Manual V1 |
 | Nimofast onboarding (first invoice batch) | In progress |
 

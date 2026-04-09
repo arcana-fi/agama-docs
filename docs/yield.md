@@ -21,7 +21,7 @@ This is the oldest form of finance. Trade receivables have existed for centuries
 The vault NAV increases linearly as invoices approach maturity. The NAV oracle computes the current value of each invoice based on its accrual factor.
 
 ```
-NAV(t) = Sum of (face_value_i × accrual_factor_i)
+NAV(t) = Σ [purchase_price_i + (face_value_i - purchase_price_i) × accrual_factor_i]
 
 accrual_factor = (t - t_purchase) / (t_maturity - t_purchase)
 

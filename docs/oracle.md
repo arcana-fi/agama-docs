@@ -100,7 +100,7 @@ What stays private: everything. The sidecar reads data locally using the view ke
 The oracle does not publish a single NAV number. It publishes the NAV broken down into three risk tranches, computed from the invoice portfolio.
 
 ```
-NAV(t) = Σ (face_value_i × accrual_factor_i)
+NAV(t) = Σ [purchase_price_i + (face_value_i - purchase_price_i) × accrual_factor_i]
 
 accrual_factor_i = (t - t_purchase_i) / (t_maturity_i - t_purchase_i)
 
@@ -166,14 +166,16 @@ PRIVATE INPUTS (never published)
   ri           Enygma blinding factor
 
 CIRCUIT CONSTRAINTS
-  1. Each face value is positive (range proof: vi > 0)
+  1. Each face value and purchase price are positive
+     (range proof: vi > 0, pi > 0, pi ≤ vi)
   2. Each accrual factor is computed correctly
      from the public timestamps
   3. No invoice has accrued beyond its face value
      (accrual_factor ≤ 1)
-  4. The sum of all accrued values = the claimed NAV
-  5. The tranche breakdown sums to the total NAV
-  6. Each invoice is assigned to the correct tranche
+  4. value_i = purchase_price_i + (face_value_i - purchase_price_i) × accrual_factor_i
+  5. The sum of all accrued values = the claimed NAV
+  6. The tranche breakdown sums to the total NAV
+  7. Each invoice is assigned to the correct tranche
      based on its duration
 
 PUBLIC OUTPUTS (published on-chain)
