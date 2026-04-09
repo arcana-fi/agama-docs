@@ -32,16 +32,30 @@ Dependent on a native lending market deploying on the Rayls Public Chain.
 
 **Target: 10M AUM**
 
-## V3 — Independent Protocol (12-24 months)
+## V3 — Oracle Network + Independent Protocol (12-24 months)
 
-Exit Lagoon dependency. Build native vault infrastructure for private institutional assets on Rayls.
+The real V3 is not just building our own vault protocol. It is deploying Agama Oracle Nodes at every Rayls institutional partner. The vault protocol is a consequence — once we control the oracle layer, every vault built on top has a structural advantage.
 
 | Component | Description |
 |-----------|-------------|
-| AgamaVault.sol | Native ERC-7540. Audited. Multi-asset support. Senior/junior tranching |
-| AgamaOracle V3 | Real-time multi-source feed (Nimofast + Santander + Nuclea). ML risk scoring with ZK proof |
+| Agama Oracle Network | Deploy the sidecar at Santander, Nuclea, AmFi, B3 Digitas. Each institution runs an Agama Node. Agama becomes the reference infrastructure for bridging private assets to public DeFi on Rayls |
+| Third-party oracle fees | Any new curator wanting to launch a vault on a Rayls private asset must use the Agama oracle network. Oracle fees on every third-party vault |
+| AgamaVault.sol | Native ERC-7540. Audited. Multi-asset support. Senior/junior tranching. Independent from Lagoon |
+| AgamaOracle V3 | Real-time multi-source feed (Nimofast + Santander + Nuclea simultaneously). ML risk scoring with ZK proof |
 | AgamaRouter | Multi-stablecoin auto-routing (USDXP, USDr, USDT, bridged assets) |
-| Credit Vaults | Agama-native lending infrastructure per originator |
+
+```
+The real business at V3:
+
+  Not curator fees (0.5% AUM) — that's the V1 business
+
+  Oracle fees on every vault that reads private asset NAV
+  through an Agama Node — that's the V3 business
+
+  Chainlink model: own the software, institutions run the nodes
+  Data is confidential → only Agama sidecar can read it
+  Structurally non-replaceable
+```
 
 **Target: 100M AUM**
 
@@ -97,8 +111,10 @@ agaUSD is backed by confidential private credit on Rayls. The debtors behind the
 ## Echelon summary
 
 ```
-1M    V1  agaINV live, NAV oracle, USDXP, Lagoon curator
+1M    V1  agaINV live, NAV oracle sidecar at Nimofast, Lagoon curator
 10M   V2  Cork looping, agaYLD via Arbitrum, agaTRD
-100M  V3  Independent protocol, multi-vault, tranching
-500M  V4  agaUSD synthetic dollar, sagaUSD yield, $AGA token
+100M  V3  Oracle network at 5+ institutions, independent protocol,
+          third-party oracle fees, the Chainlink of private credit
+500M  V4  agaUSD synthetic dollar backed by the oracle network,
+          sagaUSD yield layer, $AGA governance
 ```
