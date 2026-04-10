@@ -18,11 +18,11 @@ The financing layer that lets investors earn yield on these assets without expos
   invoices via Parfin       generates ZK proof     (ERC-7540)
 
   ┌──────────────┐          ┌──────────────┐       ┌──────────────┐
-  │  Tokenized   │  ZK proof│  NAV Oracle  │  NAV  │  agaINV      │
+  │  Tokenized   │  ZK proof│  NAV Oracle  │  NAV  │  agaNMF      │
   │  invoices    │─────────▶│              │──────▶│  vault       │
   │  (private)   │          │  Verified    │       │              │
   └──────────────┘          │  on-chain    │       │  USDXP in    │
-                            └──────────────┘       │  agaINV out  │
+                            └──────────────┘       │  agaNMF out  │
   Debtor identities                                └──────────────┘
   and amounts stay                                        │
   confidential                                     Token price rises
@@ -36,9 +36,9 @@ All Agama vaults operate on the same model: the LP token appreciates in price ev
 
 | Day | Action | Token balance | Token price |
 |-----|--------|--------------|-------------|
-| 1 | Deposit 1,000 USDXP | 1,000 agaINV | 1.0000 |
-| 15 | Nothing | 1,000 agaINV | 1.0040 |
-| 30 | Nothing | 1,000 agaINV | 1.0080 |
+| 1 | Deposit 1,000 USDXP | 1,000 agaNMF | 1.0000 |
+| 15 | Nothing | 1,000 agaNMF | 1.0040 |
+| 30 | Nothing | 1,000 agaNMF | 1.0080 |
 
 Same mechanic as wstETH, sDAI or USDY. Yield is embedded in the token price, not distributed periodically.
 

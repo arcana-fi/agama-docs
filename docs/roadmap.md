@@ -5,12 +5,12 @@ title: Agama Documentation
 
 ## V1. Curator on Lagoon (April 30, 2026)
 
-Deploy agaINV on Rayls mainnet day one. Prove the concept with Nimofast. Build the NAV oracle.
+Deploy agaNMF on Rayls mainnet day one. Prove the concept with Nimofast. Build the NAV oracle.
 
 | Component | Status |
 |-----------|--------|
 | NAV oracle. gnark ZK proof with TrancheNAV (Go): enygma_client.go, nav_circuit.go, AgamaVerifier.sol, onchain_relay.go | Build |
-| Lagoon curator setup (agaINV on Rayls Public Chain) | Configure |
+| Lagoon curator setup (agaNMF on Rayls Public Chain) | Configure |
 | USDXP deposit flow | Integrate |
 | USDr gas management | Integrate |
 | Daily settlement cycle trigger | Build |
@@ -26,10 +26,10 @@ Dependent on a native lending market deploying on the Rayls Public Chain.
 
 | Component | Status |
 |-----------|--------|
-| Cork Pool agaINV/USDXP on Rayls | Deploy when lending market available |
-| Protected Loop Vault agaINV | Build |
+| Cork Pool agaNMF/USDXP on Rayls | Deploy when lending market available |
+| Protected Loop Vault agaNMF | Build |
 | agaYLD looping via Arbitrum bridge | Available earlier |
-| agaTRD vault (Santander pipeline) | Build |
+| agaSAN vault (Santander pipeline) | Build |
 | NAV oracle V2 (real-time feed) | Build |
 | Risk monitoring (circuit breakers, LTV alerts) | Build |
 
@@ -68,7 +68,7 @@ The first synthetic dollar backed by private credit with ZK confidentiality.
 
 | Component | Description |
 |-----------|-------------|
-| agaUSD | Synthetic dollar. Mint 1:1 against USDXP. Backed by Credit Vaults (agaINV, agaTRD, agaCORP, agaREC). Senior priority on all vaults. Composable across Rayls DeFi |
+| agaUSD | Synthetic dollar. Mint 1:1 against USDXP. Backed by Credit Vaults (agaNMF, agaSAN, agaCORP, agaNUC). Senior priority on all vaults. Composable across Rayls DeFi |
 | sagaUSD | Staked agaUSD. Absorbs first-loss risk. Earns the yield from Credit Vaults. Target 8-12% APY |
 | Stability reserve | Protocol buffer before sagaUSD absorbs losses. Funded by a portion of performance fees. Target 3-5% of total TVL |
 | $AGA token | Governance over Credit Vault parameters (which originators, which discounts, which allocations). Revenue sharing with stakers. Emission tied to TVL milestones, not aggressive initial farming |
@@ -98,10 +98,10 @@ STABILITY RESERVE
 
 | Vault | Allocation | Duration |
 |-------|-----------|----------|
-| agaINV (Nimofast invoices) | 40% | 30-90 days |
-| agaTRD (Santander trade finance) | 30% | 90-180 days |
+| agaNMF (Nimofast invoices) | 40% | 30-90 days |
+| agaSAN (Santander trade finance) | 30% | 90-180 days |
 | agaCORP (corporate invoices) | 20% | 30-90 days |
-| agaREC (Nuclea receivables) | 10% | Short term |
+| agaNUC (Nuclea receivables) | 10% | Short term |
 
 ### Why agaUSD vs Pareto USP
 
@@ -114,8 +114,8 @@ agaUSD is backed by confidential private credit on Rayls. The debtors behind the
 ## Echelon summary
 
 ```
-1M    V1  agaINV live, NAV oracle sidecar at Nimofast, Lagoon curator
-10M   V2  Cork looping, agaYLD via Arbitrum, agaTRD
+1M    V1  agaNMF live, NAV oracle sidecar at Nimofast, Lagoon curator
+10M   V2  Cork looping, agaYLD via Arbitrum, agaSAN
 100M  V3  Oracle network at 5+ institutions, independent protocol,
           third-party oracle fees, the Chainlink of private credit
 500M  V4  agaUSD synthetic dollar backed by the oracle network,

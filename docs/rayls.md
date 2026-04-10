@@ -31,9 +31,9 @@ These are the institutions building on Rayls whose assets Agama can vault. Agama
 
 | Partner | Assets on Rayls | Agama vault |
 |---------|----------------|-------------|
-| Nimofast | LNG energy invoices via Parfin | agaINV |
-| Santander Brazil | Corporate invoices, real estate, automotive | agaCORP, agaTRD |
-| Nuclea | Interbank receivables, boletos | agaREC |
+| Nimofast | LNG energy invoices via Parfin | agaNMF |
+| Santander Brazil | Corporate invoices, real estate, automotive | agaCORP, agaSAN |
+| Nuclea | Interbank receivables, boletos | agaNUC |
 | AmFi | Private credit ($500M+ tokenized) | agaPC |
 | B3 Digitas | Fixed income instruments | agaFI |
 | XP Inc. | USDXP stablecoin | Deposit currency across all vaults |

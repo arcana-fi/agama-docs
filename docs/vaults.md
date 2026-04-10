@@ -3,7 +3,7 @@ title: Agama Documentation
 ---
 # Vaults
 
-## agaINV: Invoice Vault (Priority 1)
+## agaNMF: Invoice Vault (Priority 1)
 
 The first Agama vault. Built on our relationship with Nimofast, it validates the entire infrastructure.
 
@@ -29,7 +29,7 @@ The first Agama vault. Built on our relationship with Nimofast, it validates the
 
 4. The Oracle Sidecar reads invoice balances via view key, computes the NAV, and generates a ZK proof using gnark. The proof is verified on-chain by anyone. Debtor identities and amounts remain concealed by Enygma
 
-5. The ZK proof is verified on-chain. on the public chain. agaINV price rises.
+5. The ZK proof is verified on-chain. on the public chain. agaNMF price rises.
 
 6. At maturity, Nimofast repays $100,000. The vault captures the spread.
 
@@ -67,8 +67,8 @@ Built on identified relationships with Rayls partners. Each vault uses the same 
 | Vault | Underlying | Partner | Target APY |
 |-------|-----------|---------|-----------|
 | agaYLD | Institutional stablecoin yield (BUIDL 40% + USDY 30% + TBILL 20% + USDXP buffer 10%) |. | 4–5% |
-| agaTRD | Letters of credit, corporate trade finance | Santander Brazil | 10–15% |
+| agaSAN | Letters of credit, corporate trade finance | Santander Brazil | 10–15% |
 | agaCORP | Diversified corporate invoices | Santander Brazil | 7–10% |
-| agaREC | Brazilian interbank receivables (100% of boletos) | Nuclea | 8–11% |
+| agaNUC | Brazilian interbank receivables (100% of boletos) | Nuclea | 8–11% |
 | agaPC | Tokenized private credit ($500M+ migrating to Rayls) | AmFi | 10–14% |
 | agaFI | Brazilian tokenized fixed income | B3 Digitas | 5–7% |

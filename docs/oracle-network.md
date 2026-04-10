@@ -3,7 +3,7 @@ title: Agama Documentation
 ---
 # Oracle Network
 
-The NAV Oracle is not just a technical component of agaINV. It is the core of Agama's long-term business.
+The NAV Oracle is not just a technical component of agaNMF. It is the core of Agama's long-term business.
 
 Every Rayls institutional partner. Nimofast, Santander, Nuclea, AmFi. has assets sitting on their Privacy Node that generate zero yield for DeFi investors. For those assets to be accessible, something has to read the private data and publish a verified NAV on the public chain. That something is the Agama Oracle Sidecar. Without it, private assets remain locked and invisible. With it, they become financeable.
 
@@ -30,7 +30,7 @@ PRIVACY NODE (Nimofast)
                    ▼
 PUBLIC CHAIN
 ┌─────────────────────────────────────┐
-│  agaINV vault                       │
+│  agaNMF vault                       │
 │  Share price: ???                   │
 │  Cannot update without NAV          │
 └─────────────────────────────────────┘
@@ -77,7 +77,7 @@ PUBLIC CHAIN
 │   IAgamaOracle smart contract                        │
 │   Receives ZK proof, verifies on-chain via AgamaVerifier             │
 │   Updates Lagoon vault share price                   │
-│   agaINV price rises as invoices mature              │
+│   agaNMF price rises as invoices mature              │
 │                                                      │
 └──────────────────────────────────────────────────────┘
 ```
@@ -132,9 +132,9 @@ V3. 12-24 months
 
 | Institution | Asset type | Vault | Node status |
 |-------------|-----------|-------|-------------|
-| Nimofast | LNG energy invoices | agaINV | V1. deploy April 30 |
-| Santander Brazil | Trade finance, corporate invoices | agaTRD, agaCORP | V2 |
-| Nuclea | Interbank receivables, boletos | agaREC | V3 |
+| Nimofast | LNG energy invoices | agaNMF | V1. deploy April 30 |
+| Santander Brazil | Trade finance, corporate invoices | agaSAN, agaCORP | V2 |
+| Nuclea | Interbank receivables, boletos | agaNUC | V3 |
 | AmFi | Private credit | agaPC | V3 |
 | B3 Digitas | Fixed income | agaFI | V3 |
 
@@ -201,7 +201,7 @@ The gnark ZK proof is deployed from V1. V3 extends it with ML risk scoring integ
 ```
 TODAY
   Agama builds the sidecar at Nimofast
-  agaINV goes live on Lagoon
+  agaNMF goes live on Lagoon
   Investors earn 8-12% APY on LNG energy invoices
 
 V3

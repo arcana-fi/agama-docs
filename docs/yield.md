@@ -59,7 +59,7 @@ The vault NAV is updated daily. Between updates, deposits are queued via the ERC
      │                       │  share price          │
      │                       │                       │
      │  4. Claim shares      │                       │
-     │  (agaINV)             │                       │
+     │  (agaNMF)             │                       │
      │◀──────────────────────│                       │
      │                       │                       │
 ```

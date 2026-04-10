@@ -7,11 +7,11 @@ Looping is the strategy that multiplies effective yield by using vault tokens as
 
 ## The problem
 
-agaINV has a 30-90 day redemption window. A lending market will not accept it as collateral because it cannot liquidate quickly if the borrower defaults. This is called duration risk, and it is the core barrier to scaling RWA looping.
+agaNMF has a 30-90 day redemption window. A lending market will not accept it as collateral because it cannot liquidate quickly if the borrower defaults. This is called duration risk, and it is the core barrier to scaling RWA looping.
 
 Agama awaits the deployment of a native lending market on the Rayls Public Chain. Once available, three looping scenarios become possible.
 
-## Scenario A. agaINV loop on Rayls [V2. requires Rayls lending market]
+## Scenario A. agaNMF loop on Rayls [V2. requires Rayls lending market]
 
 Target: 20-25% net APY.
 
@@ -19,17 +19,17 @@ Target: 20-25% net APY.
   ┌──────────────────────────────────────────────────────────────┐
   │                                                              │
   │   1. Deposit 100,000 USDXP                                  │
-  │      └──▶ Receive agaINV (12% APY base)                     │
+  │      └──▶ Receive agaNMF (12% APY base)                     │
   │                                                              │
-  │   2. Supply agaINV as collateral on lending market           │
+  │   2. Supply agaNMF as collateral on lending market           │
   │      └──▶ Cork cST protects lender against duration risk    │
   │                                                              │
   │   3. Borrow 70,000 USDXP (LTV 70%)                         │
-  │      └──▶ Re-deposit into agaINV vault                      │
+  │      └──▶ Re-deposit into agaNMF vault                      │
   │                                                              │
   │   4. Repeat steps 2-3 two more times                        │
   │                                                              │
-  │   Final: ~230,000 agaINV exposure                            │
+  │   Final: ~230,000 agaNMF exposure                            │
   │          for 100,000 USDXP of capital                        │
   │                                                              │
   └──────────────────────────────────────────────────────────────┘
@@ -53,7 +53,7 @@ agaYLD contains public assets (BUIDL, USDY, TBILL, USDXP). no privacy required. 
 
 Target: 15-18% net APY.
 
-agaINV yield at 12%. USDXP borrow rate on Rayls lending market at ~5-6%. The spread of ~6-7% is captured at 2.5x leverage via Cork-protected looping.
+agaNMF yield at 12%. USDXP borrow rate on Rayls lending market at ~5-6%. The spread of ~6-7% is captured at 2.5x leverage via Cork-protected looping.
 
 ## Comparison with existing RWA loops
 
@@ -62,4 +62,4 @@ agaINV yield at 12%. USDXP borrow rate on Rayls lending market at ~5-6%. The spr
 | Apollo ACRED | US institutional credit | 8% | ~16% | Ethereum (Morpho) |
 | PRIME | US home equity credit | 8% | ~24% | Solana (Drift) |
 | Ondo USDY | Tokenized T-bills | 5% | ~10% | Ethereum |
-| **Agama agaINV** | **Brazilian energy invoices** | **8-12%** | **~20-25%** | **Rayls** |
+| **Agama agaNMF** | **Brazilian energy invoices** | **8-12%** | **~20-25%** | **Rayls** |

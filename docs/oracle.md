@@ -25,7 +25,7 @@ PRIVACY NODE (Nimofast)
                    ▼
 PUBLIC CHAIN
 ┌─────────────────────────────────────┐
-│  agaINV vault                       │
+│  agaNMF vault                       │
 │  Share price: ???                   │
 │  Cannot update without NAV          │
 └─────────────────────────────────────┘
@@ -117,7 +117,7 @@ Tranche assignment by invoice duration:
 What the investor sees on-chain:
 
 ```
-agaINV Portfolio
+agaNMF Portfolio
 
 NAV Total        :  1,240,000 USDXP
 ZK Proof         :  Verified on-chain
@@ -130,7 +130,7 @@ Breakdown :
 Last update      :  2026-04-30 14:23 UTC
 ```
 
-Why tranching from day one: it is the foundation for agaUSD at V4 (the capital stack already exists on-chain with historical data), and it prepares Cork integration (the lender can look at the senior ratio to decide the acceptable LTV on agaINV).
+Why tranching from day one: it is the foundation for agaUSD at V4 (the capital stack already exists on-chain with historical data), and it prepares Cork integration (the lender can look at the senior ratio to decide the acceptable LTV on agaNMF).
 
 ## The ZK circuit
 

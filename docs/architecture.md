@@ -41,7 +41,7 @@ Agama is built on top of the Rayls architecture, which separates private institu
 │   │  Agama NAV      │───▶│  Lagoon Vault    │                      │
 │   │  Oracle         │    │  (ERC-7540)      │                      │
 │   │                 │    │                  │                       │
-│   │  Verifies ZK    │    │  agaINV token    │                      │
+│   │  Verifies ZK    │    │  agaNMF token    │                      │
 │   │  proof on-chain  │    │  Async deposits  │                      │
 │   │  Updates NAV     │    │  KYC whitelist   │                      │
 │   └─────────────────┘    └──────────────────┘                      │
@@ -67,7 +67,7 @@ For Agama: the assets live on Privacy Nodes (layer 1). The vaults and LP tokens 
 |-------|------|------------|
 | Privacy Node | Invoice metadata, debtor identity, amounts, payment history | Only the originator (Nimofast) |
 | Bridge | Agama Sidecar generates ZK proof, aggregated risk score | The proof is public, the inputs are not |
-| Public Chain | Vault token (agaINV), share price, NAV, deposit/withdrawal history | Everyone |
+| Public Chain | Vault token (agaNMF), share price, NAV, deposit/withdrawal history | Everyone |
 
 ## Gas management
 
