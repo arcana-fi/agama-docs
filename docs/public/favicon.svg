@@ -1,14 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <style>
-    rect { fill: #ffffff; }
-    path { fill: #000000; }
-    @media (prefers-color-scheme: dark) {
-      rect { fill: #1e1e1e; }
-      path { fill: #ffffff; }
-    }
-  </style>
-  <rect width="64" height="64" rx="14"/>
-  <g transform="translate(7.9,58.2) scale(0.075,-0.075)">
+  <rect width="64" height="64" rx="14" fill="#1a1f2b"/>
+  <g transform="translate(7.9,58.2) scale(0.075,-0.075)" fill="#ffffff">
     <path d="M361 700L293 700L13 0L93 0L161 171L330 171C378 171 417 197 424 243L190 243L327 589L560 0L642 0Z"/>
   </g>
 </svg>

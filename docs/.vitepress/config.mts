@@ -10,7 +10,7 @@ export default defineConfig({
   description: 'Institutional RWA Vault Curator on Rayls',
   appearance: true,
   head: [
-    ['link', { rel: 'icon', href: '/favicon.png', type: 'image/png', sizes: '32x32' }],
+    ['link', { rel: 'icon', href: '/favicon.svg' }],
   ],
   themeConfig: {
     logo: { src: '/logo.svg', alt: 'Agama' },
